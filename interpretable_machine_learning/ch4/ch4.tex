@@ -27,14 +27,14 @@ x_p$ where the weights $\hat{\beta_0}, ..., \hat{\beta_p}$ are learned by
 minimizing squared error. You can construct confidence intervals around the
 weights to measure uncertainty.
 
-The linear model is a bad fit for your data if it is not linear, if noise is
-not normally distributed, if the noise does not have constant variance, if
+The linear model is a bad fit if your data is not linear, if noise is
+not normally distributed, if noise does not have constant variance, if
 instances are not independent of each other, or features are strongly
 correlated.
 
 Increasing a numerical feature increases the prediction by its weight. For a
 binary feature, changing from reference category (0) to the other category
-adjusts the prediction by its weight. For a categorical feature with multiple
+increases the prediction by its weight. For a categorical feature with multiple
 categories, you can use one-hot encoding (with $L - 1$ entries for $L$
 categories - all $0$ is the reference category). The intercept $\beta_0$ is the
 prediction when all categorical features are at the reference class and all
@@ -77,7 +77,8 @@ the L1 regularization term $\lambda ||\beta||_1$ to the least squares objective.
 Pick lambda by putting feature weight on the $y$ axis, $\log{\lambda}$ on the
 $x$ axis, and plotting each feature weight as you vary lambda. Pick the lambda
 that gives you the desired number of nonzero features. Other options to get
-sparsity is to use domain knowledge, pick features correlated with the target,
+sparsity is to use domain knowledge to pick promising features, pick features
+correlated with the target,
 use forward selection (greedily add features that improve $R^2$ the most),
 or use backward selection.
 
@@ -93,7 +94,7 @@ regression overcomes these problems. For binary classification, logistic
 regression computes the log odds with $\log{\frac{P(y = 1)}{P(y = 0)}} = \beta_0 +
 \beta_1 x_1 + ... + \beta_p x_p$. You may find it easier to look at the odds
 instead of the log odds. You can also solve for $P(y = 1)$ by noting that
-$P(Y = 0) = 1 - P(Y = 1)$.
+$P(y = 0) = 1 - P(y = 1)$.
 
 Logistic regression has the same pros and cons of linear regression. It is
 more complicated than the linear regression model because of the log odds.
@@ -172,15 +173,15 @@ has contributed.
 Decision trees are easily understood and can handle feature interactions. It
 also makes counterfactual analysis easy (what if I went down this path
 instead?). They also don't require you to standardize numerical features or
-encode categorical features. Their key disadvantages are that they can only
-approximate linear relationships, are not smooth, and are unstable (changing
+encode categorical features. Their key disadvantages are that they can exactly
+model linear relationships, are not smooth, and are unstable (changing
 the dataset may yield very different tree).
 
 \section{Decision Rules}
 These are IF-THEN rules (IF = condition/antecedent, THEN = prediction). These
-rules can have ANDs or ORs in them. A rule is evaluated by its support (fraction
+rules can have ANDs in them. A rule is evaluated by its support (fraction
 of examples for which the antecedent applies) and accuracy (when the antecedent
-applies, what fraction of the time is it correct). When you have many rules,
+applies, what fraction of the time is it correct?). When you have many rules,
 some rules might overlap and there may be examples that do not fit any rules.
 We fix overlap with a decision list (i.e. we consider rules one at a time) or
 decision set (i.e. the rules run independently and we average their votes). We
@@ -188,8 +189,9 @@ also make a default rule that applies if no other rule matches. We can learn
 rules with OneR, sequential covering, and Bayesian Rule Lists.
 
 OneR first discretizes continuous features. Then for each feature we consider
-each discrete value, look at dominant target value (if you are doing regression,
-discretize the target), and create a rule and
+each discrete feature value, look at the dominant target value for that
+feature value (if you are doing regression, discretize the target), and create a
+rule and
 compute the error of the rule. We then pick the feature with smallest overall
 error. If features have many possible discrete values, OneR can overfit, so use
 a training set to make rules and validation set to evaluate error.
@@ -201,10 +203,10 @@ threshold. For multiclass settings, we treat the least common class as class 1
 and all other classes as class 0. Once we finish learning class 1, we consider
 the next least common class and repeat the process. To learn a rule, we fit
 a decision tree and recursively select the purest nodes and turn the path from
-node to leaf into a rule. There are other ways to learn rules. RIPPER is a
+root to leaf into a rule. There are other ways to learn rules. RIPPER is a
 more sophisticated variant of sequential covering.
 
-In Bayesian Rule Lists, we first pre-mine frequent patterns and then build
+In Bayesian Rule Lists (BRL), we first pre-mine frequent patterns and then build
 a rule list from them. To mine frequent patterns, we don't need the targets.
 A pattern is just a set of (feature, feature value) pairs. The frequency is
 the support. You can mine frequent patterns with the Apriori or FP-Growth
@@ -226,19 +228,19 @@ discretize. Except for RIPPER and BRL, they tend to overfit.
 \section{RuleFit}
 This learns sparse linear models that learns interaction effects (as decision
 rules). Basically, we learn decision trees, pick paths from root to leaf as
-decision rules (i.e. just AND the splits), and use these as features along with
+decision rules, and use these as features along with
 the regular features, and do Lasso (L1) linear regression. You can interpret them
 with the same techniques we use for linear models. The importance of a feature
 should also include all the rules that it appears in.
 
 Note that you can fit a
-random forest or gradient boosted tree on the problem and then extract the
+random forest or gradient boosted tree on the data and then extract the
 rules from the resulting model. Then, take your features and windsorize them
 (i.e. constrain them between the 5th percentile and 95th percentile values).
-Next, add linear features (one per windsorized feature) to the set of
-decision rules. These linear features should be $0.4 * f / std(f)$ where $f$
-is the feature - we do this so they are comparable to the decision rules. Then,
-do Lasso (L1) regression.
+Next, add linear terms (one per windsorized feature) to the set of
+decision rules. These linear terms should be $0.4 * f / std(f)$ where $f$
+is the feature - we do this so they are comparable to the decision rule
+features. Then, do Lasso (L1) regression.
 
 To compute feature importance for the linear terms, we do $I_j = |\beta_j| std(
 l_j(x_j))$ where $\beta_j$ is the learned weight and $l_j(x_j)$ is the linear
@@ -246,7 +248,8 @@ term. For decision rules we have
 $I_k = |\alpha_k| \sqrt{s_k (1 - s_k)}$ where $\alpha_k$ is the learned weight
 and $s_k$ is the support of the rule. The overall importance for a feature is
 the importance of its linear term plus its importance in all the rules that it
-appears in (a rule splits its importance evenly over the features inside it).
+appears in (a rule splits its importance evenly over the features that
+comprise it).
 
 RuleFit is great because it mixes linear models and rule models. It also has
 good local interpretability because most rules will not apply for a given data
@@ -256,7 +259,7 @@ many rules or when there are overlapping rules.
 
 \section{Other Interpretable Models}
 Naive Bayes assumes features are independent and computes $P(C_k | x) = \frac{1
-}{Z} P(C_k) \sum_{i=1}^{n}{P(x_i | C_k)}$ where $Z$ is a normalization constant
+}{Z} P(C_k) \sum_{j=1}^{p}{P(x_j | C_k)}$ where $Z$ is a normalization constant
 that ensures the probabilities sum to 1. This is interpretable because you can
 see how much probability each feature contributes.
 

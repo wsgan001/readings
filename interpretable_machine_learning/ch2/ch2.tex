@@ -28,7 +28,7 @@ customers.
 Models that explain their predictions may be more socially acceptable and offer
 a better user experience than black box models.
 
-Interpretability allows us to examine the following properties of the model
+Interpretability allows us to examine the following properties of the model:
 fairness (model should not be prejudiced), privacy (model is not exposing
 or using sensitive information), reliability/robustness (small changes in
 input should not cause big changes in output), and causality (model uses causal
@@ -40,7 +40,7 @@ try to game the model (e.g. a security model that explains how it detects bad
 actors might give them hints on how to circumvent it).
 
 \section{Taxonomy of Interpretability Methods}
-Interpretability can be instrinsic (the model is simple, like a decision tree)
+Interpretability can be intrinsic (the model is simple, like a decision tree)
 or post-hoc (i.e. we use some algorithm to extract interpretations). Here are
 the possible outputs of an interpretation method.
 
@@ -58,7 +58,8 @@ explain an individual prediction, a local group of predictions, or the global
 set of all predictions.
 
 \section{Scope of Interpretability}
-Algorithm transparency is how a particular learning algorithm learns from data.
+Algorithm transparency is about how a particular learning algorithm learns from
+data.
 For example, we understand how least squares works and roughly how a
 convolutional neural net works (i.e. successive layers learn edges, shapes,
 parts, and objects). We don't understand how complicated neural nets or
@@ -103,12 +104,12 @@ interpretable models like decision trees.
 The important properties of explanation methods are expressive power (how rich is
 the "language" used to generate explanations?), translucency (how much does
 the method depend on looking inside the model?), portability (how many different
-kinds of models does the explanation work with?), and algorithmic complexity
+kinds of models does the explanation method work with?), and algorithmic complexity
 (how much compute time is needed to create the explanation?).
 
 For individual explanations, we have some important properties. Accuracy is
 how well the explanation predicts unseen data. If the explanation, is "The house
-was priced as expensive because it has many rooms", then this should true of
+was priced as expensive because it has many rooms", then this should be true of
 other homes too. Fidelity is how well the explanation reflects what is actually
 going on in the model. Fidelity can be local or global. Consistency is how
 similar explanations are between two different models trained for the same
