@@ -144,8 +144,8 @@ detector with the remaining points and keep repeating this.
 Another approach is to remove bad ensemble components. First, we compute
 each points ensemble score and treat these as ground truth. Then we
 find the detector most correlated with this ground truth and put that
-in ensemble $\scriptL$. We then iteratively add to $\scriptL$ by adding
-the detector most correlated with $\scriptL$. Use Pearson correlation here.
+in ensemble $\mathcal{L}$. We then iteratively add to $\mathcal{L}$ by adding
+the detector most correlated with $\mathcal{L}$. Use Pearson correlation here.
 You can also focus on outlier points only here, which requires you to
 binarize the scores.
 

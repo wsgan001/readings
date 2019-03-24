@@ -31,10 +31,10 @@ If $D^T D$ is not invertible, we can regularize with parameter $\alpha$ and
 minimize $||D \bar{W}^T - \bar{y}||^2 + \alpha ||\bar{W}||^2$ to get
 $\bar{W}^T = (D^T D + \alpha I)^{-1}D^T \bar{y}$.
 
-Ironically, the present of outliers can mess up the inference of the parameters,
+Ironically, the presence of outliers can mess up the inference of the parameters,
 so it is typical to randomly sample some points and fit those. We do this
 many times and create an ensemble. For a given point, we average the squared
-error over each ensemble component to get its outlier score. We can also
+error over each ensemble component to get the point's outlier score. We can also
 use extreme value analysis on these squared errors.
 
 To use linear regression in an unsupervised setting, we can consider each
@@ -70,7 +70,8 @@ variance. If there is not much data, we can regularize by replacing $\Sigma$
 with $\Sigma + \alpha I$.
 
 How do you pick the number of eigenvalues, $k$? You can use a $t$ test and
-find outliers. These are typically the large eigenvalues.
+find outliers in the set of eigenvalues. It is typical that most eigenvalues
+are small and there are a few big ones.
 
 To make PCA nonlinear, we use the kernel trick. First, we note that we can
 do PCA with similarity matrix $S = D D^T$ instead of $\Sigma$. Then, we
@@ -88,14 +89,15 @@ $\exp{(-\frac{||\bar{X}_i - \bar{X}_j||^2}{\sigma^2})}$, polynomial kernel
 $(\bar{X}_i^T \bar{X}_j + c)^h$, and sigmoid kernel $\tanh{(\kappa \bar{X}_i^T
 \bar{X}_j - \delta)}$. The RBF kernel is the most popular. For the RBF kernel,
 use the median pairwise distance between points (or three times the pairwise
-distance if you have fewer than 1000 data points). To speed up kernel
+distance if you have fewer than 1000 data points) as the kernel
+parameter. To speed up kernel
 computation, you can simply set similarity to 0 if points are not $k$
 nearest neighbors. There are kernel functions for complex data types like
 strings, time series, and graphs.
 
 The similarity matrix is $N \times N$, which is huge. So, we sample $s$ points
 and use the technique described above to get $Q_k \Lambda_k$. We then compute
-the similarity of other other points to the sample points to get
+the similarity of the other points to the sample points to get
 $(N - s) \times s$ matrix $S_o$. The embedding is then
 $V_k = S_o Q_k \Lambda_k^{-1}$. We stack $Q_k \Lambda_k$ vertically on top
 of $S_o Q_k \Lambda_k^{-1}$ to get the $N \times k$ embedding $E$. We
@@ -145,7 +147,7 @@ element at $(i, j)$ is $x_{ij}$. Let $H = \{(i, j) : x_{ij} \textrm{ is not
 missing}\}$. Decomposing $D$ into $UV^T$ means the predicted value for $(i, j)$
 is $\sum_{s=1}^{k}{u_{is} v_{sj}}$. We then minimize $J = \frac{1}{2}
 \sum_{(i, j) \in H}{(x_{ij} - \sum_{s=1}^{k}{u_{is} v_{sj}})^2}
-+ \frac{\alpha}{2}(||U||^2 + ||V||^2)$. Letting $e_{ij} = x_{ij} -
++ \frac{\alpha}{2}(||U||^2 + ||V||^2)$. Letting $e_{ij} = (x_{ij} -
 \sum_{s=1}^{k}{u_{is} v_{sj}})^2$ and computing the gradient gives us the
 gradient descent update equations $U \gets U(1- \alpha \eta) + \eta EV$
 and $V \gets V(1 - \alpha \eta) + \eta E^T U$. Here, $E$ is a matrix that has

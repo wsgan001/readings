@@ -38,7 +38,7 @@ has expected value $Nf^k$ and standard deviation $\sqrt{Nf^k (1 - f^k)}$. If
 the number of points in cell $\mathcal{D}$ is $n(D)$, we define the sparsity
 coefficient $S(\mathcal{D}) = \frac{n(\mathcal{D}) - Nf^k}{\sqrt{Nf^k (1 - f^k)}}$.
 This is a nice score (you can combine it with extreme value analysis), but
-there are a ton of grid cells, so we will to use a genetic algorithm to pick
+there are a ton of grid cells, so we will use a genetic algorithm to pick
 the best cells. We generate some candidate solutions, do recombination and
 mutation, and then make the next generation of solutions. Doing this iteratively
 helps us find more fit solutions. We represent each grid cell (a solution) as a
@@ -119,7 +119,7 @@ pseudocode for the $OUTRES$ algorithm.
 There's a distance-based way to look for interesting subspaces for a given
 point. First, we let $S(\bar{X})$ be the $k$ nearest neighbors of $\bar{X}$.
 The subspace $Q(\bar{X})$ is the set of dimensions of $S(\bar{X})$ where
-variance is small (according to a threshold). $G(\bar{X}$ is the Euclidean
+variance is small (according to a threshold). $G(\bar{X})$ is the Euclidean
 distance of $\bar{X}$ to the centroid of $S(\bar{X})$. We normalize this by
 the number of dimensions in $Q(\bar{X})$ to get $SOD(\bar{X}) = G(\bar{X})/
 Q(\bar{X})$. This is not a great approach though because it considers dimensions

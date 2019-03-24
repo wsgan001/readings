@@ -80,7 +80,7 @@ reduces dataset variance the most. There are hueristics for picking the
 subsets.
 
 In angle based methods, we use the intuition that outlier points should be
-able to close the rest of the data by casting out two rays with a small angle.
+able to enclose the rest of the data by casting out two rays with a small angle.
 So, given a test point $\bar{X}$ and random points $\bar{Y}$ and $\bar{Z}$,
 we can compute the angle as
 
@@ -115,7 +115,7 @@ Mahalanobis distance).
 \end{align}
 
 If $\Sigma$ is not invertible, we can replace it with $\Sigma + \lambda I$ for
-small $\lambda$ (this is regularization). This nice thing about the above
+small $\lambda$ (this is regularization). The nice thing about the above
 Mahalanobis technique is that is it is parameter-free, accounts for variance
 in each dimension, and runs in linear time (to compute mean and covariance).
 
@@ -143,7 +143,7 @@ The E-step computes:
     \sum_{i=1}^{k}{\alpha_i f^{i, \Theta}(\bar{X}_j)}}
 \end{align}
 
-The M-step computes (where the $\alpha_i$ expression uses Laplacing smoothing
+The M-step computes (where the $\alpha_i$ expression uses Laplacian smoothing
 to push the estimate towards $1/k$):
 
 \begin{align}

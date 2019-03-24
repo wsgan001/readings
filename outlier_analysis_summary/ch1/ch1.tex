@@ -51,7 +51,7 @@ We often want interpretable models, which provide hints about why a point is
 considered an outlier.
 
 To measure the non-uniformity of a set of 1-dimensional points $x_1, ..., x_N$
-is to compute mean $\mu$, variance $\sigma$, z-scores $z_i = \frac{x_i - \mu}{
+we compute mean $\mu$, variance $\sigma$, z-scores $z_i = \frac{x_i - \mu}{
 \sigma}$ and combine them together to get the Kurtosis measure:
 
 \begin{align}
@@ -100,8 +100,8 @@ models.
 
 For high dimensional data, it's hard to compute distances. So, we do subspace
 outlier detection, where we look for subspaces where anomalous behavior is
-exhibited. The subspaces are typically interpretable (e.g. Age < 20 and
-Disease = 1).
+exhibited. The subspaces are typically interpretable (e.g. Age $< 20$ and
+Disease $= 1$).
 
 \section{Outlier Ensembles}
 We can combine many algorithms into an ensemble. A sequential ensemble (e.g.
@@ -134,17 +134,17 @@ have a temporal component to graphs as they evolve over time.
 \section{Supervised Outlier Detection}
 If we have known outliers, we can use supervised learning. This is harder than
 regular supervised learning because the classes are heavily unbalanced. Some
-challenges are the Positive-Unlabled Classification problem (i.e. we have known
+challenges are the Positive-Unlabeled Classification problem (i.e. we have known
 outliers and a set of points whose outlier status is unknown), limited datasets
 (e.g. we do not know all the kinds of outliers, so we have a subset of them),
 and active learning (we select possible outlier points that we can send to a
 labeler who tells us for sure whether they are outliers or not).
 
 \section{Outlier Evaluation Techniques}
-If you have labeled examples, use that. If you have a specific task where you
+If you have labeled examples, use them. If you have a specific task where you
 are using the model, use task specific metrics. You can also use internal
 validity metrics (e.g. mean squared radius of cluster), but it's easy to overfit
-if you rely on this.
+if you rely on these.
 
 If you have labeled points, use precision and recall as your metrics. Given a
 threshold $t$ on outlier scores we can compute their predicted binary labels
